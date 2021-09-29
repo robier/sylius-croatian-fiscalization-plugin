@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+set -e
+
+if [ $# -eq 0 ]; then
+    echo "Help: Triggers xdebug session at first break point in provided PHP CLI script"
+    echo ""
+    echo "Usage: xdebug <php file> [args]"
+    echo ""
+    echo "When no php file is provided, this help message is shown!"
+
+    exit 1
+fi
+
+if [ ! -f "${1}" ]; then
+    echo "Error: 1st argument (${1}) is not a path to php file!"
+
+    exit 1
+fi
+
+XDEBUG_SESSION=1 php "$@"

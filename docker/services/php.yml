@@ -1,0 +1,36 @@
+version: '3.7'
+
+services:
+  php:
+    build:
+      target: ${PHP_COUNTAINER_TARGET}
+      context: ../
+      dockerfile: ./images/php.Dockerfile
+      args:
+        HOST_USER_ID: ${DOKMAN_HOST_USER_ID}
+        HOST_GROUP_ID: ${DOKMAN_HOST_GROUP_ID}
+        TIMEZONE: ${TIMEZONE}
+    image: ${COMPOSE_PROJECT_NAME}/php:1.0
+    hostname: php
+    environment:
+      TIMEZONE: ${TIMEZONE}
+      XDEBUG_REMOTE_HOST: ${DOKMAN_HOST_IP}
+      XDEBUG_PROFILER_OUTPUT_DIR: ${XDEBUG_PROFILER_OUTPUT_DIR}
+      PHP_IDE_CONFIG: serverName=${COMPOSE_PROJECT_NAME}.loc
+      # application environments
+      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql/${MYSQL_DATABASE}
+    user: app
+    working_dir: /app
+    volumes:
+      # php configurations
+      - ../configurations/php/php.ini:/usr/local/etc/php/php.ini
+      - ../configurations/php/xdebug.ini:/usr/local/etc/php/conf.d/90-xdebug.ini
+      - ../configurations/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      # helper scripts
+      - ../scripts/php/xdebug:/usr/local/bin/xdebug
+      - ../scripts/php/xprofile:/usr/local/bin/xprofile
+      # application
+      - ../../:/app
+      # ssh keys
+      - ~/.ssh/:/home/app/.ssh/
+    command: ["php-fpm", "-F"]

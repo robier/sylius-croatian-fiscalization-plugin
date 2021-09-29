@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  mysql:
+    hostname: mysql
+    image: mysql:5.7.35
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: ${TIMEZONE}
+    volumes:
+      - mysql:/var/lib/mysql
+      # health check script
+      - ../scripts/healthcheck/mysql.sh:/usr/local/bin/docker-health-check
+    healthcheck:
+      test: ['CMD', 'docker-health-check']
+
+volumes:
+  mysql:

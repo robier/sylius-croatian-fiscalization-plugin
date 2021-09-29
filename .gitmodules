@@ -1,0 +1,3 @@
+[submodule "dokman"]
+	path = docker/.dokman
+	url = https://github.com/robier/dokman

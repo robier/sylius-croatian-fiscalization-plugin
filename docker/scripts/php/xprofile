@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+set -e
+
+if [ $# -eq 0 ]; then
+    echo "Help: Triggers profiling session of given PHP CLI script"
+    echo "      Output directory is: ${XDEBUG_PROFILER_OUTPUT_DIR}"
+    echo ""
+    echo "Usage: xprofile <php file> [args]"
+    echo ""
+    echo "When no php file is provided, this help message is shown!"
+
+    exit 1
+fi
+
+if [ ! -f "${1}" ]; then
+    echo "Error: 1st argument (${1}) is not a path to php file!"
+
+    exit 1
+fi
+
+XDEBUG_PROFILE=1 php "$@"

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<!--    <imports>-->
+<!--        <import resource="services/*.xml"/>-->
+<!--    </imports>-->
+    <services>
+        <!-- Put your services here -->
+        <defaults autoconfigure="true" autowire="true" public="true" />
+        <service id="robier_sylius_croatian_fiscalization_plugin.event_producer.fiscalize" class="Robier\SyliusCroatianFiscalizationPlugin\EventProducer\Fiscalize" />
+        <service id="robier_sylius_croatian_fiscalization_plugin.event_producer.fiscalize" class="Robier\SyliusCroatianFiscalizationPlugin\EventProducer\Fiscalize" />
+
+        <service id="robier_sylius_croatian_fiscalization_plugin.fiscalize.client.demo" class="Robier\Fiscalization\Client\Demo">
+            <factory class="Robier\Fiscalization\Client" method="demo" />
+            <argument type="service">
+                <service class="Robier\Fiscalization\Certificate">
+                    <argument>%robier_sylius_croatian_fiscalization_plugin.certificate.demo.root_path%</argument>
+                    <argument>%robier_sylius_croatian_fiscalization_plugin.certificate.demo.private_path%</argument>
+                    <argument>%robier_sylius_croatian_fiscalization_plugin.certificate.demo.passphrase%</argument>
+                </service>
+            </argument>
+        </service>
+
+        <service id="robier_sylius_croatian_fiscalization_plugin.fiscalize.client.production" class="Robier\Fiscalization\Client\Production">
+            <factory class="Robier\Fiscalization\Client" method="production" />
+            <argument type="service">
+                <service class="Robier\Fiscalization\Certificate">
+                    <argument>%robier_sylius_croatian_fiscalization_plugin.certificate.production.root_path%</argument>
+                    <argument>%robier_sylius_croatian_fiscalization_plugin.certificate.production.private_path%</argument>
+                    <argument>%robier_sylius_croatian_fiscalization_plugin.certificate.production.passphrase%</argument>
+                </service>
+            </argument>
+        </service>
+
+        <service id="robier_sylius_croatian_fiscalization_plugin.converter.bill" class="Robier\SyliusCroatianFiscalizationPlugin\Converter\BillConverter" />
+
+        <service id="robier_sylius_croatian_fiscalization_plugin.event_producer.fiscalize" class="Robier\SyliusCroatianFiscalizationPlugin\EventProducer\Fiscalize">
+            <argument type="service" id="robier_sylius_croatian_fiscalization_plugin.converter.bill" />
+            <argument type="service" id="robier_sylius_croatian_fiscalization_plugin.fiscalize.client.demo" />
+        </service>
+    </services>
+</container>

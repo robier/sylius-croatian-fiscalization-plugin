@@ -1,0 +1,4 @@
+suites:
+    main:
+        namespace: Robier\SyliusCroatianFiscalizationPlugin
+        psr4_prefix: Robier\SyliusCroatianFiscalizationPlugin

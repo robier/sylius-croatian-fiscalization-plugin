@@ -1,0 +1,29 @@
+robier_sylius_croatian_fiscalization:
+  environment: 'demo'
+  certificate:
+    demo:
+      root_path: '%kernel.project_dir%/var/certificates/demo_root.txt'
+      private_path: '%kernel.project_dir%/var/certificates/FISKAL_1.p12'
+      passphrase: '4BKqYm_7tt\T*^<h'
+    production:
+      root_path: '%kernel.project_dir%/var/certificates/demo_root.txt'
+      private_path: '%kernel.project_dir%/var/certificates/FISKAL_1.p12'
+      passphrase: '4BKqYm_7tt\T*^<h'
+  company:
+    oib: 96676332840
+    inside_tax_registry: true
+  operator:
+    oib: 96676332840
+  bill:
+    store_designation: POS1
+    toll_device_number: 1
+    sequence_type: shop
+
+winzou_state_machine:
+  sylius_payment:
+    callbacks:
+      before:
+        robier_sylius_croatian_fiscalization_plugin_fiscalize:
+          on: ['complete']
+          do: ['@robier_sylius_croatian_fiscalization_plugin.event_producer.fiscalize', '__invoke']
+          args: ['object']

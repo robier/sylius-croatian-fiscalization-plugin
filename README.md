@@ -103,6 +103,13 @@ robier_sylius_croatian_fiscalization_plugin:
   resource: "@RobierSyliusCroatianFiscalizationPlugin/Resources/config/routing.yaml"
 ```
 
+Add new tables to the database:
+```bash
+bin/console doctrine:schema:update --dump-sql
+# and if you are satisfied with updates then run
+bin/console doctrine:schema:update --force
+```
+
 Create starting bill sequence by running command
 ```bash
 bin/console robier:croatian-fiscalization:set-bill-sequence 1/POS1/1
@@ -110,6 +117,16 @@ bin/console robier:croatian-fiscalization:set-bill-sequence 1/POS1/1
 Sequence should be defined by company internal act document but this library for now
 only supports numbers like this is single toll device. Only first number increases
 with every bill sent to FINA.
+
+Clear your application cache
+```bash
+bin/console clear:cache
+```
+
+Setup TAX in your admin. You need to create TAX with code `vat` if you want it to be applied
+on the bill that is sent to the FINA. Delivery is added as TAX exemption, as delivery
+company will apply TAX on their bill.
+
 
 ## Local development (Docker)
 

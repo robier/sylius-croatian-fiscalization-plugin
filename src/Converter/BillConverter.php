@@ -42,8 +42,10 @@ final class BillConverter
 
         $bill = $this->billFactory->new($created, $billIdentifier, $redelivery);
 
-        foreach ($extractedTaxes['PDV'] as $tax) {
-            $bill->addTax(new Tax\Vat(...$tax));
+        if (isset($extractedTaxes['vat'])) {
+            foreach ($extractedTaxes['vat'] as $tax) {
+                $bill->addTax(new Tax\Vat(...$tax));
+            }
         }
 
         $shippingAmount = 0;

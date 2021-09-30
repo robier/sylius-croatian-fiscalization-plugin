@@ -1,5 +1,7 @@
 # Croatian fiscalization plugin
 
+**Note**: This package is still under development
+
 Enables your shop to communicate with Croatian FINA when a customer makes a purchase.
 
 You do not need to send data to FINA if a customer makes offline purchase (bank transfer or paying on delivery).
@@ -100,6 +102,14 @@ Import routes
 robier_sylius_croatian_fiscalization_plugin:
   resource: "@RobierSyliusCroatianFiscalizationPlugin/Resources/config/routing.yaml"
 ```
+
+Create starting bill sequence by running command
+```bash
+bin/console robier:croatian-fiscalization:set-bill-sequence 1/POS1/1
+```
+Sequence should be defined by company internal act document but this library for now
+only supports numbers like this is single toll device. Only first number increases
+with every bill sent to FINA.
 
 ## Local development (Docker)
 

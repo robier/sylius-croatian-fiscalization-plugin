@@ -55,5 +55,9 @@
             <argument key="$billConverter" type="service" id="robier_sylius_croatian_fiscalization_plugin.converter.bill"/>
             <argument key="$maxAttempts">%robier_sylius_croatian_fiscalization_plugin.resending.max_attempts%</argument>
         </service>
+
+        <service id="robier_sylius_croatian_fiscalization_plugin.command.set_sequence_number" class="Robier\SyliusCroatianFiscalizationPlugin\Command\BillSequenceSetterCommand">
+            <tag name="console.command"/>
+        </service>
     </services>
 </container>

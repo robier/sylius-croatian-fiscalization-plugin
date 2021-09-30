@@ -1,0 +1,17 @@
+robier_sylius_croatian_fiscalization_plugin_admin_order_fiscalization_data_partial:
+  path: /_robier_sylius_croatian_fiscalization/data/{id}
+  methods: [GET]
+  defaults:
+    _controller: robier_sylius_croatian_fiscalization_plugin.controller.data
+    _sylius:
+      section: admin
+      permission: true
+
+robier_sylius_croatian_fiscalization_plugin_admin_order_fiscalization_resend:
+  path: /_robier_sylius_croatian_fiscalization/resend/{id}
+  methods: [GET]
+  defaults:
+    _controller: robier_sylius_croatian_fiscalization_plugin.controller.resend
+    _sylius:
+      section: admin
+      permission: true

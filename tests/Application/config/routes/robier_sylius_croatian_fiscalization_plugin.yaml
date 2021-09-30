@@ -1,0 +1,2 @@
+robier_sylius_croatian_fiscalization_plugin:
+  resource: "@RobierSyliusCroatianFiscalizationPlugin/Resources/config/routing.yaml"

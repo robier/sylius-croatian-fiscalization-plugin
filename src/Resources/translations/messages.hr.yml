@@ -1,0 +1,14 @@
+robier_sylius_croatian_fiscalization_plugin:
+  ui:
+    fiscalization: 'Hrvatska fiskalizacija'
+    unique_bill_identifier: jedinstveni indetifikator računa (JIR)
+    issuer_security_code: Zaštitni kod izdavatelja (ZKI)
+    identifier: Broj računa
+    try: Pokušaj
+    errors: Pogreške
+    try_again: Probaj ponovno poslat
+    date_time: Vrijeme slanja
+    no_fails: Nemože se ponovo poslat pošto nema neuspješnih slanja
+    too_much_fails: Previše puta je bilo neuspješnog slanja (provjerite greške)
+    sucess_resend: Uspješno poslano
+    no_data: Nema podataka pošto naruđba još uvijek nije plačena ili vrsta naplate ne poslježe fiskalizaciji (uplata po transakcijskom računu/naplata po pouzeću)

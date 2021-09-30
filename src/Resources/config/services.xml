@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-<!--    <imports>-->
-<!--        <import resource="services/*.xml"/>-->
-<!--    </imports>-->
     <services>
-        <!-- Put your services here -->
         <defaults autoconfigure="true" autowire="true" public="true" />
-        <service id="robier_sylius_croatian_fiscalization_plugin.event_producer.fiscalize" class="Robier\SyliusCroatianFiscalizationPlugin\EventProducer\Fiscalize" />
         <service id="robier_sylius_croatian_fiscalization_plugin.event_producer.fiscalize" class="Robier\SyliusCroatianFiscalizationPlugin\EventProducer\Fiscalize" />
 
         <service id="robier_sylius_croatian_fiscalization_plugin.fiscalize.client.demo" class="Robier\Fiscalization\Client\Demo">
@@ -32,11 +27,33 @@
             </argument>
         </service>
 
-        <service id="robier_sylius_croatian_fiscalization_plugin.converter.bill" class="Robier\SyliusCroatianFiscalizationPlugin\Converter\BillConverter" />
+        <service id="robier_sylius_croatian_fiscalization_plugin.converter.bill" class="Robier\SyliusCroatianFiscalizationPlugin\Converter\BillConverter">
+            <argument type="service">
+                <service class="Robier\SyliusCroatianFiscalizationPlugin\Factory\BillFactory">
+                    <argument>%robier_sylius_croatian_fiscalization_plugin.company.oib%</argument>
+                    <argument>%robier_sylius_croatian_fiscalization_plugin.operator.oib%</argument>
+                    <argument>%robier_sylius_croatian_fiscalization_plugin.company.inside_tax_registry%</argument>
+                </service>
+            </argument>
+        </service>
 
         <service id="robier_sylius_croatian_fiscalization_plugin.event_producer.fiscalize" class="Robier\SyliusCroatianFiscalizationPlugin\EventProducer\Fiscalize">
-            <argument type="service" id="robier_sylius_croatian_fiscalization_plugin.converter.bill" />
-            <argument type="service" id="robier_sylius_croatian_fiscalization_plugin.fiscalize.client.demo" />
+            <argument key="$billSender" type="service" id="robier_sylius_croatian_fiscalization_plugin.service.bill_sender" />
+            <argument key="$disableOnPaymentCodes">%robier_sylius_croatian_fiscalization_plugin.disable_on_payment_codes%</argument>
+        </service>
+
+        <service id="robier_sylius_croatian_fiscalization_plugin.controller.data" class="Robier\SyliusCroatianFiscalizationPlugin\Controller\FiscalizationData">
+            <tag name="controller.service_arguments"/>
+        </service>
+        <service id="robier_sylius_croatian_fiscalization_plugin.controller.resend" class="Robier\SyliusCroatianFiscalizationPlugin\Controller\FiscalizationResend">
+            <tag name="controller.service_arguments"/>
+            <argument type="service" id="robier_sylius_croatian_fiscalization_plugin.service.bill_sender" />
+        </service>
+
+        <service id="robier_sylius_croatian_fiscalization_plugin.service.bill_sender" class="Robier\SyliusCroatianFiscalizationPlugin\Service\BillSender">
+            <argument key="$client" type="service" id="robier_sylius_croatian_fiscalization_plugin.fiscalize.client" />
+            <argument key="$billConverter" type="service" id="robier_sylius_croatian_fiscalization_plugin.converter.bill"/>
+            <argument key="$maxAttempts">%robier_sylius_croatian_fiscalization_plugin.resending.max_attempts%</argument>
         </service>
     </services>
 </container>

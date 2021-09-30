@@ -1,0 +1,41 @@
+{% import '@SyliusUi/Macro/buttons.html.twig' as buttons %}
+
+<div class="ui segment" id="order-invoices">
+    <h3 class="ui dividing header" id="shipping-state">{{ 'robier_sylius_croatian_fiscalization_plugin.ui.fiscalization'|trans }}</h3>
+    <p>{{ 'robier_sylius_croatian_fiscalization_plugin.ui.identifier'|trans }}: {{ logs[0].billIdentifier }}</p>
+    <table class="ui celled compact small table fixed">
+        <thead>
+        <tr>
+            <th style="width: 100px">{{ 'robier_sylius_croatian_fiscalization_plugin.ui.try'|trans }}</th>
+            <th>{{ 'robier_sylius_croatian_fiscalization_plugin.ui.errors'|trans }}</th>
+            <th style="width: 150px">{{ 'robier_sylius_croatian_fiscalization_plugin.ui.date_time'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+                <tr>
+                    <td>
+                        #{{ loop.index }}
+                    </td>
+                    <td>
+                        {% for code, reason in log.reasons %}
+                            {{ code }} - {{ reason }} <br/>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ log.created.format('H:i:s d.m.Y.') }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {{ buttons.default(
+        path(
+            'robier_sylius_croatian_fiscalization_plugin_admin_order_fiscalization_resend',
+            { id: logs[0].order.id }
+        ),
+        'robier_sylius_croatian_fiscalization_plugin.ui.try_again'|trans,
+        orderId,
+        'send'
+    ) }}
+</div>

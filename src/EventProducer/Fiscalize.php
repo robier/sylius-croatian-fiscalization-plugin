@@ -4,35 +4,22 @@ declare(strict_types=1);
 
 namespace Robier\SyliusCroatianFiscalizationPlugin\EventProducer;
 
-use Robier\Fiscalization\Client\Production;
-use Robier\SyliusCroatianFiscalizationPlugin\Converter\BillConverter;
+use Robier\SyliusCroatianFiscalizationPlugin\Service\BillSender;
 use Sylius\Component\Core\Model\PaymentInterface;
 
 final class Fiscalize
 {
-    public function __construct(
-        private BillConverter $billConverter,
-        private Production $client
-    )
+    public function __construct(private BillSender $billSender, private array $disableOnPaymentCodes)
     {
         // noop
     }
 
-    public function __invoke(PaymentInterface $payment)
+    public function __invoke(PaymentInterface $payment): void
     {
-        $order = $payment->getOrder();
-
-        $bill = ($this->billConverter)($order);
-
-        try{
-            $response = $this->client->send($bill);
-        } catch (\Exception $e) {
-            // @todo log failure
-            dd($e);
+        if (in_array($payment->getMethod()->getCode(), $this->disableOnPaymentCodes, true)) {
+            return;
         }
 
-        // @todo log success
-
-        dd($response);
+        $this->billSender->new($payment->getOrder());
     }
 }

@@ -7,12 +7,11 @@ namespace Robier\SyliusCroatianFiscalizationPlugin\Entity;
 use DateTimeImmutable;
 use Sylius\Component\Core\Model\OrderInterface;
 
-final class Fiscalisation
+final class Fiscalization
 {
     public function __construct(
         private string $id,
         private string $securityCode,
-        private int $total,
         private string $sequenceNumber,
         private DateTimeImmutable $created,
         private OrderInterface $order,
@@ -38,11 +37,6 @@ final class Fiscalisation
     public function created(): DateTimeImmutable
     {
         return $this->created;
-    }
-
-    public function total(): int
-    {
-        return $this->total;
     }
 
     public function sequenceNumber(): string

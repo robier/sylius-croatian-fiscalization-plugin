@@ -16,8 +16,17 @@ final class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('robier_sylius_croatian_fiscalization');
 
-        $treeBuilder->getRootNode()->children()
+        $treeBuilder->getRootNode()
+            ->children()
+                ->arrayNode('disable_on_payment_codes')->defaultValue([])
+                    ->prototype('scalar')->end()
+                ->end()
                 ->enumNode('environment')->values(['demo', 'production'])->end()
+                ->arrayNode('resending')
+                    ->children()
+                        ->integerNode('max_attempts')->defaultValue(3)->end()
+                    ->end()
+                ->end() // resending
                 ->arrayNode('certificate')
                     ->children()
                         ->arrayNode('demo')
@@ -47,13 +56,6 @@ final class Configuration implements ConfigurationInterface
                         ->scalarNode('oib')->defaultNull()->end()
                     ->end()
                 ->end() // operator
-                ->arrayNode('bill')
-                    ->children()
-                        ->scalarNode('store_designation')->canNotBeEmpty()->end()
-                        ->integerNode('toll_device_number')->end()
-                        ->scalarNode('sequence_type')->defaultValue('shop')->end()
-                    ->end()
-                ->end() // bill
             ->end();
 
 

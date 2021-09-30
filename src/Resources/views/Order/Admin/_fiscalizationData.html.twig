@@ -1,0 +1,27 @@
+{% import '@SyliusUi/Macro/buttons.html.twig' as buttons %}
+
+<div class="ui segment" id="order-invoices">
+    <h3 class="ui dividing header" id="shipping-state">{{ 'robier_sylius_croatian_fiscalization_plugin.ui.fiscalization'|trans }}</h3>
+    <table class="ui celled compact small table fixed">
+        <thead>
+        <tr>
+            <th>{{ 'robier_sylius_croatian_fiscalization_plugin.ui.unique_bill_identifier'|trans }}</th>
+            <th>{{ 'robier_sylius_croatian_fiscalization_plugin.ui.issuer_security_code'|trans }}</th>
+            <th>{{ 'robier_sylius_croatian_fiscalization_plugin.ui.identifier'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    {{ unique_bill_identification }}
+                </td>
+                <td>
+                    {{ issuer_security_code }}
+                </td>
+                <td>
+                    {{ identifier }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

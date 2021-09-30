@@ -1,0 +1,14 @@
+robier_sylius_croatian_fiscalization_plugin:
+  ui:
+    fiscalization: 'Croatian Fiscalization'
+    unique_bill_identifier: Unique bill identifier (JIR)
+    issuer_security_code: Issuer security code (ZKI)
+    identifier: Bill identifier
+    try: Try
+    errors: Errors
+    try_again: Try resending
+    date_time: Tried at
+    no_fails: There is no fails to make a resend
+    too_much_fails: Too much fails (check errors)
+    sucess_resend: Succesfully resend
+    no_data: There is no fiscalization data at this moment as order is not paid yet or becouse of it's payment type will not be fiscalized (bank transfer/payment on delivery)

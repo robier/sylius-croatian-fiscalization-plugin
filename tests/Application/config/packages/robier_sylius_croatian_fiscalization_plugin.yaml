@@ -1,0 +1,21 @@
+imports:
+  - { resource: "@RobierSyliusCroatianFiscalizationPlugin/Resources/config/config.yaml" }
+
+robier_sylius_croatian_fiscalization:
+  environment: 'demo'
+  resending:
+    max_attempts: 3
+  certificate:
+    demo:
+      root_path: '%kernel.project_dir%/var/certificates/demo_root.txt'
+      private_path: '%kernel.project_dir%/var/certificates/FISKAL_1.p12'
+      passphrase: '4BKqYm_7tt\T*^<h'
+    production:
+      root_path: '%kernel.project_dir%/var/certificates/demo_root.txt'
+      private_path: '%kernel.project_dir%/var/certificates/FISKAL_1.p12'
+      passphrase: '4BKqYm_7tt\T*^<h'
+  company:
+    oib: 96676332840
+    inside_tax_registry: true
+  operator:
+    oib: ~

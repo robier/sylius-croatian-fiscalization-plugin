@@ -12,22 +12,31 @@ use Robier\Fiscalization\Operator;
 
 final class BillFactory
 {
-//    public function __construct(string $companyOib, ?string $operatorOib, bool $companyInsideTaxRegistry, string $paymentType, string $)
-//    {
-//
-//    }
+    protected Company $company;
+    protected Operator $operator;
 
-    public function new(DateTimeImmutable $dateTime)
+    public function __construct(string $companyOib, ?string $operatorOib, bool $companyInsideTaxRegistry)
     {
-        $oib = new Oib('13074646146');
-        $company = new Company($oib, true);
-        $operator = new Operator($oib);
+        $companyOibObject = new Oib($companyOib);
+        $operatorOibObject = $companyOibObject;
+        if (null !== $operatorOib && $companyOib !== $operatorOib) {
+            $operatorOibObject = new Oib($operatorOib);
+        }
 
+        $this->company = new Company($companyOibObject, $companyInsideTaxRegistry);
+        $this->operator = new Operator($operatorOibObject);
+    }
+
+    public function new(DateTimeImmutable $dateTime, Bill\Identifier $identifier, bool $redelivery = false)
+    {
         return new Bill(
-            $company,
-            $operator,
+            $this->company,
+            $this->operator,
             $dateTime,
-
+            $identifier,
+            Bill\PaymentType::cash(),
+            Bill\SequenceType::billingDevice(),
+            $redelivery
         );
     }
 }

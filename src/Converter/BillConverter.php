@@ -6,55 +6,54 @@ namespace Robier\SyliusCroatianFiscalizationPlugin\Converter;
 
 use DateTimeImmutable;
 use Robier\Fiscalization\Bill;
-use Robier\Fiscalization\Company;
-use Robier\Fiscalization\Oib;
-use Robier\Fiscalization\Operator;
 use Robier\Fiscalization\Tax;
+use Robier\SyliusCroatianFiscalizationPlugin\Factory\BillFactory;
 use Sylius\Component\Core\Model\AdjustmentInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 
 final class BillConverter
 {
-    public function __construct()
+    public function __construct(private BillFactory $billFactory)
     {
-
+        // noop
     }
 
-    private function bill(): Bill
+    public function __invoke(
+        OrderInterface $order,
+        DateTimeImmutable $created,
+        Bill\Identifier $billIdentifier,
+        bool $redelivery = false
+    ): Bill
     {
-        // @todo change
-        $oib = new Oib('96676332840');
-        $company = new Company($oib, true);
-        $operator = new Operator($oib);
+        $extractedTaxes = [];
+        foreach ($order->getItems() as $item) {
+            foreach ($item->getUnits() as $unit) {
+                foreach ($unit->getAdjustments(AdjustmentInterface::TAX_ADJUSTMENT) as $tax) {
+                    if (isset($extractedTaxes[$tax->getDetails()['taxRateCode']]) === false) {
+                        $extractedTaxes[$tax->getDetails()['taxRateCode']] = [];
+                    }
+                    $extractedTaxes[$tax->getDetails()['taxRateCode']][] = [
+                        $unit->getOrderItem()->getUnitPrice(),
+                        (int)($tax->getDetails()['taxRateAmount'] * 10000)
+                    ];
+                }
+            }
+        }
 
-        $bill = new Bill(
-            $company,
-            $operator,
-            New DateTimeImmutable(),
-            new Bill\Identifier(1, 'POS1', 1),
-            Bill\PaymentType::card(),
-            Bill\SequenceType::billingDevice(),
-            false
-        );
+        $bill = $this->billFactory->new($created, $billIdentifier, $redelivery);
 
-        return $bill;
-    }
+        foreach ($extractedTaxes['PDV'] as $tax) {
+            $bill->addTax(new Tax\Vat(...$tax));
+        }
 
-    public function __invoke(OrderInterface $order): Bill
-    {
-        // @todo figure out how to get TAX-es out
-//        $taxes = $order->getAdjustmentsRecursively(AdjustmentInterface::TAX_ADJUSTMENT);
-//        $extractedTaxes = [];
-//        foreach ($taxes as $tax) {
-//            if (!isset($extractedTaxes[$tax->getLabel()])) {
-//                $extractedTaxes[$tax->getLabel()] = 0;
-//            }
-//
-//            $extractedTaxes[$tax->getLabel()] += $tax->getAmount();
-//        }
+        $shippingAmount = 0;
+        foreach ($order->getAdjustmentsRecursively(AdjustmentInterface::SHIPPING_ADJUSTMENT) as $shipping) {
+            $shippingAmount += $shipping->getAmount();
+        }
 
-        $bill = $this->bill();
-        $bill->addTax(new Tax\Vat(100_00, 10_00));
+        if ($shippingAmount !== 0) {
+            $bill->setTaxFreeAmount($shippingAmount);
+        }
 
         return $bill;
     }

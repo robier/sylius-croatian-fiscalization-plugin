@@ -1,5 +1,4 @@
 {
-    "minimum-stability": "dev",
     "name": "robier/sylius-croatian-fiscalization-plugin",
     "type": "sylius-plugin",
     "description": "Plugin allowing to send data to Croatian FINA",
@@ -11,7 +10,8 @@
     "require": {
         "php": "^8.0",
         "robier/fiscalization": "dev-master",
-        "sylius/sylius": "~1.9.0 || ~1.10.0@alpha"
+        "sylius/sylius": "~1.9.0 || ~1.10.0@alpha",
+        "symfony/lock": "^5.3"
     },
     "require-dev": {
         "behat/behat": "^3.6.1",

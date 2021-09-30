@@ -26,7 +26,14 @@ final class BillSequenceSetterCommand extends Command
     )
     {
         parent::__construct();
-        $this->PATH = realpath(__DIR__ . '/../Resources/config/bill-sequence.txt');
+
+        $pathToFile = __DIR__ . '/../Resources/config/bill-sequence.txt';
+        $path = realpath($pathToFile);
+        if ($path === false) {
+            file_put_contents($pathToFile, '');
+        }
+
+        $this->PATH = realpath($pathToFile);
     }
 
     protected function configure(): void

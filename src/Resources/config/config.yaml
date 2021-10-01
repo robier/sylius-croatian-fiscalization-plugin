@@ -11,6 +11,6 @@ sylius_ui:
   events:
     sylius.admin.order.show.summary:
       blocks:
-        sylius_invoicing_plugin:
+        robier_sylius_croatian_fiscalization_plugin:
           template: '@RobierSyliusCroatianFiscalizationPlugin/Order/Admin/fetchFiscalizationData.html.twig'
           priority: 15

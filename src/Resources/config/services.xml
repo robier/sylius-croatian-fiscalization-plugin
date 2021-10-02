@@ -59,7 +59,7 @@
             <argument key="$maxAttempts">%robier_sylius_croatian_fiscalization_plugin.resending.max_attempts%</argument>
         </service>
 
-        <service id="robier_sylius_croatian_fiscalization_plugin.command.set_sequence_number" class="Robier\SyliusCroatianFiscalizationPlugin\Command\BillSequenceSetterCommand">
+        <service id="robier_sylius_croatian_fiscalization_plugin.command.set_sequence_number" class="Robier\SyliusCroatianFiscalizationPlugin\Cli\BillSequenceSetterCommand">
             <tag name="console.command"/>
             <argument key="$billSequenceFile">%robier_sylius_croatian_fiscalization_plugin.sequence.file_path%</argument>
         </service>

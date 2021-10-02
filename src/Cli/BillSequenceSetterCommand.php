@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Robier\Fiscalization\Bill;
 use Robier\SyliusCroatianFiscalizationPlugin\Entity\Fiscalization;
 use Robier\SyliusCroatianFiscalizationPlugin\Entity\FiscalizationFailLog;
+use Robier\SyliusCroatianFiscalizationPlugin\Order\InvoiceNumberGenerator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,8 +41,12 @@ final class BillSequenceSetterCommand extends Command
 
         $identifier = Bill\Identifier::fromString($sequence);
 
-        $lock = $this->lockFactory->createLock('robier-sylius-croatian-fiscalization-plugin.fiscalize');
+        $lock = $this->lockFactory->createLock(InvoiceNumberGenerator::LOCK_KEY);
         $lock->acquire(true);
+
+        if (is_readable($this->billSequenceFile) === false) {
+            file_put_contents($this->billSequenceFile, '');
+        }
 
         if ((string)$identifier === trim(file_get_contents($this->billSequenceFile))) {
             $output->writeln('<info>Identifier is identical, no change</info>');

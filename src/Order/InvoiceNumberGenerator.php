@@ -11,6 +11,8 @@ use Symfony\Component\Lock\LockFactory;
 
 final class InvoiceNumberGenerator implements OrderNumberGeneratorInterface
 {
+    public const LOCK_KEY = 'robier-sylius-croatian-fiscalization-plugin.generate_invoice_number';
+
     public function __construct(
         private LockFactory $lockFactory,
         private string $billSequenceFile,
@@ -21,7 +23,7 @@ final class InvoiceNumberGenerator implements OrderNumberGeneratorInterface
 
     public function generate(OrderInterface $order): string
     {
-        $lock = $this->lockFactory->createLock('robier-sylius-croatian-fiscalization-plugin.generate_invoice_number');
+        $lock = $this->lockFactory->createLock(self::LOCK_KEY);
         $lock->acquire(true);
 
         $identifier = Bill\Identifier::fromString(trim(file_get_contents($this->billSequenceFile)))->next();

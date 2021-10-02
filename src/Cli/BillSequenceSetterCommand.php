@@ -6,8 +6,6 @@ namespace Robier\SyliusCroatianFiscalizationPlugin\Cli;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Robier\Fiscalization\Bill;
-use Robier\SyliusCroatianFiscalizationPlugin\Entity\Fiscalization;
-use Robier\SyliusCroatianFiscalizationPlugin\Entity\FiscalizationFailLog;
 use Robier\SyliusCroatianFiscalizationPlugin\Order\InvoiceNumberGenerator;
 use Sylius\Component\Core\Model\Order;
 use Symfony\Component\Console\Command\Command;

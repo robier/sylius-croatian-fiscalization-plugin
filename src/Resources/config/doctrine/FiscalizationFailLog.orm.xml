@@ -12,7 +12,6 @@
         </id>
 
         <field name="reasons" type="json" />
-        <field name="billIdentifier" column="bill_identifier" length="100" />
         <field name="created" column="created_at" type="datetime_immutable" />
 
         <many-to-one field="order" target-entity="Sylius\Component\Core\Model\Order" />

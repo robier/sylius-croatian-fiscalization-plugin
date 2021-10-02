@@ -11,15 +11,13 @@ use Sylius\Component\Core\Model\OrderInterface;
 final class FiscalizationFailLog
 {
     private int $id;
-    private string $billIdentifier;
 
     public function __construct(
         private array $reasons,
         private DateTimeImmutable $created,
-        private OrderInterface $order,
-        Bill\Identifier $billIdentifier
+        private OrderInterface $order
     ) {
-        $this->billIdentifier = (string) $billIdentifier;
+        // noop
     }
 
     public function getId(): int
@@ -44,10 +42,5 @@ final class FiscalizationFailLog
     public function order(): OrderInterface
     {
         return $this->order;
-    }
-
-    public function billIdentifier(): Bill\Identifier
-    {
-        return Bill\Identifier::fromString($this->billIdentifier);
     }
 }

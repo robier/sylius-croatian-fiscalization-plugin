@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Robier\SyliusCroatianFiscalizationPlugin\Command;
+namespace Robier\SyliusCroatianFiscalizationPlugin\Cli;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Robier\Fiscalization\Bill;
@@ -16,24 +16,15 @@ use Symfony\Component\Lock\LockFactory;
 
 final class BillSequenceSetterCommand extends Command
 {
-    protected string $PATH;
-
     protected static $defaultName = 'robier:croatian-fiscalization:set-bill-sequence';
 
     public function __construct(
         private LockFactory $lockFactory,
         private EntityManagerInterface $entityManager,
+        private string $billSequenceFile
     )
     {
         parent::__construct();
-
-        $pathToFile = __DIR__ . '/../Resources/config/bill-sequence.txt';
-        $path = realpath($pathToFile);
-        if ($path === false) {
-            file_put_contents($pathToFile, '');
-        }
-
-        $this->PATH = realpath($pathToFile);
     }
 
     protected function configure(): void
@@ -52,7 +43,7 @@ final class BillSequenceSetterCommand extends Command
         $lock = $this->lockFactory->createLock('robier-sylius-croatian-fiscalization-plugin.fiscalize');
         $lock->acquire(true);
 
-        if ((string)$identifier === trim(file_get_contents($this->PATH))) {
+        if ((string)$identifier === trim(file_get_contents($this->billSequenceFile))) {
             $output->writeln('<info>Identifier is identical, no change</info>');
             $lock->release();
             return 0;
@@ -78,7 +69,7 @@ final class BillSequenceSetterCommand extends Command
             return 1;
         }
 
-        file_put_contents($this->PATH, (string)$identifier);
+        file_put_contents($this->billSequenceFile, (string)$identifier);
         $lock->release();
         $output->writeln('<info>Sequence number set!</info>');
         return 0;

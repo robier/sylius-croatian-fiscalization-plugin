@@ -18,8 +18,6 @@ use Symfony\Component\Lock\LockFactory;
 
 final class BillSender
 {
-    private string $PATH;
-
     public function __construct(
         private BillConverter $billConverter,
         private Production $client,
@@ -28,7 +26,7 @@ final class BillSender
         private int $maxAttempts
     )
     {
-        $this->PATH = realpath(__DIR__ . '/../Resources/config/bill-sequence.txt');
+        // noop
     }
 
     public function new(OrderInterface $order): void
@@ -36,9 +34,12 @@ final class BillSender
         $lock = $this->lockFactory->createLock('robier-sylius-croatian-fiscalization-plugin.fiscalize');
         $lock->acquire(true);
 
-        $identifier = Bill\Identifier::fromString(trim(file_get_contents($this->PATH)));
-
-        $bill = ($this->billConverter)($order, new DateTimeImmutable(), $identifier);
+        $identifier = Bill\Identifier::fromString($order->getNumber());
+        $bill = ($this->billConverter)(
+            $order,
+            new DateTimeImmutable(),
+            $identifier
+        );
 
         try {
             $response = $this->client->send($bill);
@@ -54,20 +55,17 @@ final class BillSender
             $this->entityManager->persist(new FiscalizationFailLog(
                 $e->errors(),
                 $bill->createdAt(),
-                $order,
-                $identifier
+                $order
             ));
         } catch (\Exception $e) {
             $this->entityManager->persist(new FiscalizationFailLog(
                 [$e->getMessage()],
                 $bill->createdAt(),
-                $order,
-                $identifier
+                $order
             ));
         } finally {
             // no matter if we succeeded or not, we will save new number as we will use
             // generated one if we could not sent for any reason
-            file_put_contents($this->PATH, (string)$identifier->next());
             $this->entityManager->flush();
             $lock->release();
         }
@@ -97,7 +95,7 @@ final class BillSender
             );
         }
 
-        $identifier = $fiscalizationFailLogs[0]->billIdentifier();
+        $identifier = Bill\Identifier::fromString($order->getNumber());
         $bill = ($this->billConverter)(
             $order,
             new DateTimeImmutable(),
@@ -124,15 +122,13 @@ final class BillSender
             $this->entityManager->persist(new FiscalizationFailLog(
                 $e->errors(),
                 $bill->createdAt(),
-                $order,
-                $identifier
+                $order
             ));
         } catch (\Exception $e) {
             $this->entityManager->persist(new FiscalizationFailLog(
                 [$e->getMessage()],
                 $bill->createdAt(),
-                $order,
-                $identifier
+                $order
             ));
         } finally {
             $this->entityManager->flush();

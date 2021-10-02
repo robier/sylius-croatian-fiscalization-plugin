@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="robier_sylius_croatian_fiscalization_plugin.sequence.file_path">%kernel.project_dir%/var/bill-sequence.txt</parameter>
+    </parameters>
     <services>
         <defaults autoconfigure="true" autowire="true" public="true" />
         <service id="robier_sylius_croatian_fiscalization_plugin.event_producer.fiscalize" class="Robier\SyliusCroatianFiscalizationPlugin\EventProducer\Fiscalize" />
@@ -58,6 +61,11 @@
 
         <service id="robier_sylius_croatian_fiscalization_plugin.command.set_sequence_number" class="Robier\SyliusCroatianFiscalizationPlugin\Command\BillSequenceSetterCommand">
             <tag name="console.command"/>
+            <argument key="$billSequenceFile">%robier_sylius_croatian_fiscalization_plugin.sequence.file_path%</argument>
+        </service>
+
+        <service id="robier_sylius_croatian_fiscalization_plugin.order.number_generator" class="Robier\SyliusCroatianFiscalizationPlugin\Order\InvoiceNumberGenerator">
+            <argument key="$billSequenceFile">%robier_sylius_croatian_fiscalization_plugin.sequence.file_path%</argument>
         </service>
     </services>
 </container>

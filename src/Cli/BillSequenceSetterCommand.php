@@ -9,6 +9,7 @@ use Robier\Fiscalization\Bill;
 use Robier\SyliusCroatianFiscalizationPlugin\Entity\Fiscalization;
 use Robier\SyliusCroatianFiscalizationPlugin\Entity\FiscalizationFailLog;
 use Robier\SyliusCroatianFiscalizationPlugin\Order\InvoiceNumberGenerator;
+use Sylius\Component\Core\Model\Order;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -55,21 +56,11 @@ final class BillSequenceSetterCommand extends Command
         }
 
         $ordersWithThatSequence = count($this->entityManager
-            ->getRepository(Fiscalization::class)
-            ->findBy(['sequenceNumber' => (string)$sequence]));
+            ->getRepository(Order::class)
+            ->findBy(['number' => (string)$sequence]));
 
         if ($ordersWithThatSequence !== 0) {
             $output->writeln('<error>Can not use provided sequence number as order with that sequence exists</error>');
-            $lock->release();
-            return 1;
-        }
-
-        $failedOrdersWithThatSequence = count($this->entityManager
-            ->getRepository(FiscalizationFailLog::class)
-            ->findBy(['billIdentifier' => (string)$sequence]));
-
-        if ($failedOrdersWithThatSequence !== 0) {
-            $output->writeln('<error>Can not use provided sequence number as failed orders with that sequence exists</error>');
             $lock->release();
             return 1;
         }

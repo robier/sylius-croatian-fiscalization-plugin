@@ -12,7 +12,6 @@ final class Fiscalization
     public function __construct(
         private string $id,
         private string $securityCode,
-        private string $sequenceNumber,
         private DateTimeImmutable $created,
         private OrderInterface $order,
     ) {
@@ -37,11 +36,6 @@ final class Fiscalization
     public function created(): DateTimeImmutable
     {
         return $this->created;
-    }
-
-    public function sequenceNumber(): string
-    {
-        return $this->sequenceNumber;
     }
 
     public function order(): OrderInterface

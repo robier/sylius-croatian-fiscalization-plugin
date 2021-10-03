@@ -7,7 +7,7 @@ namespace Robier\SyliusCroatianFiscalizationPlugin\Entity;
 use DateTimeImmutable;
 use Sylius\Component\Core\Model\OrderInterface;
 
-final class Fiscalization
+class Fiscalization
 {
     public function __construct(
         private string $id,

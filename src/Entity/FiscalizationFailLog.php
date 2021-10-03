@@ -8,7 +8,7 @@ use DateTimeImmutable;
 use Robier\Fiscalization\Bill;
 use Sylius\Component\Core\Model\OrderInterface;
 
-final class FiscalizationFailLog
+class FiscalizationFailLog
 {
     private int $id;
 

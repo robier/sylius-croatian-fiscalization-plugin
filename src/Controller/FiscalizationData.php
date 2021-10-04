@@ -25,7 +25,6 @@ final class FiscalizationData extends AbstractController
                 [
                     'unique_bill_identification' => $fiscalization->id(),
                     'issuer_security_code' => $fiscalization->securityCode(),
-                    'identifier' => $fiscalization->order()->getNumber(),
                 ]
             );
         }

@@ -47,7 +47,6 @@ final class BillSender
             $this->entityManager->persist(new Fiscalization(
                 $response->uniqueBillIdentifier(),
                 $response->issuerSecurityCode(),
-                (string)$bill->identifier(),
                 $bill->createdAt(),
                 $order
             ));
@@ -109,7 +108,6 @@ final class BillSender
             $this->entityManager->persist(new Fiscalization(
                 $response->uniqueBillIdentifier(),
                 $response->issuerSecurityCode(),
-                (string)$bill->identifier(),
                 $bill->createdAt(),
                 $order
             ));
